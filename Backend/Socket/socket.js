@@ -10,7 +10,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ['https://web-chat-app-frontend-zu95.onrender.com'],
+    origin: ['https://web-chat-app-frontend-1o2g.onrender.com'],
     methods: ["GET", "POST"],
   },
 });
