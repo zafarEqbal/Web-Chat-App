@@ -66,47 +66,128 @@ export const sendOtp = async (req, res) => {
 };
 
 // ✅ Verify OTP and register user
+// export const register = async (req, res) => {
+//   try {
+//     const { FullName, UserName, Email, Password, ConfirmPassword, Gender, otp } = req.body;
+
+//     if (!FullName || !UserName || !Email || !Password || !ConfirmPassword || !Gender || !otp) {
+//       return res.status(400).json({ msg: "Please fill all fields" });
+//     }
+
+//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     if (!emailRegex.test(Email)) return res.status(400).json({ msg: "Invalid email format" });
+
+//     if (Password !== ConfirmPassword) return res.status(400).json({ msg: "Passwords do not match" });
+
+//     const otpRecord = await OtpModel.findOne({ email: Email }).sort({ createdAt: -1 });
+//     if (!otpRecord || otpRecord.otp !== otp) {
+//       return res.status(400).json({ msg: "Invalid or expired OTP" });
+//     }
+
+//     const existingUser = await USER.findOne({ $or: [{ UserName }, { Email }] });
+//     if (existingUser) return res.status(400).json({ msg: "User already exists" });
+
+//     const hashedpass = await bcrypt.hash(Password, 10);
+//     const avatarBase = "https://api.dicebear.com/8.x/avataaars/svg";
+//     const seed = `${UserName}-${Math.floor(Math.random() * 10000)}`;
+//     const profilePhoto = `${avatarBase}?seed=${seed}&gender=${Gender.toLowerCase()}`;
+
+//     await USER.create({
+//       FullName,
+//       UserName,
+//       Email,
+//       Password: hashedpass,
+//       Gender,
+//       ProfilePhoto: profilePhoto,
+//       isVerified: true,
+//     });
+
+//     await OtpModel.deleteMany({ email: Email }); // Clean OTPs
+
+//     res.status(201).json({ msg: "User registered successfully", success: true });
+//   } catch (error) {
+//     console.error("Register Error:", error);
+//     res.status(500).json({ msg: "Server error" });
+//   }
+// };
+
 export const register = async (req, res) => {
   try {
-    const { FullName, UserName, Email, Password, ConfirmPassword, Gender, otp } = req.body;
+    const {
+      FullName,
+      UserName,
+      Email,
+      Password,
+      ConfirmPassword,
+      Gender,
+      otp
+    } = req.body;
 
-    if (!FullName || !UserName || !Email || !Password || !ConfirmPassword || !Gender || !otp) {
+    // Validate all fields
+    if (
+      !FullName || !UserName || !Email || !Password ||
+      !ConfirmPassword || !Gender || !otp
+    ) {
       return res.status(400).json({ msg: "Please fill all fields" });
     }
 
+    const sanitizedEmail = Email.trim().toLowerCase();
+
+    // Check valid email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(Email)) return res.status(400).json({ msg: "Invalid email format" });
+    if (!emailRegex.test(sanitizedEmail)) {
+      return res.status(400).json({ msg: "Invalid email format" });
+    }
 
-    if (Password !== ConfirmPassword) return res.status(400).json({ msg: "Passwords do not match" });
+    if (Password !== ConfirmPassword) {
+      return res.status(400).json({ msg: "Passwords do not match" });
+    }
 
-    const otpRecord = await OtpModel.findOne({ email: Email }).sort({ createdAt: -1 });
+    // Check if OTP is valid
+    const otpRecord = await OtpModel.findOne({ email: sanitizedEmail }).sort({ createdAt: -1 });
     if (!otpRecord || otpRecord.otp !== otp) {
       return res.status(400).json({ msg: "Invalid or expired OTP" });
     }
 
-    const existingUser = await USER.findOne({ $or: [{ UserName }, { Email }] });
-    if (existingUser) return res.status(400).json({ msg: "User already exists" });
+    // Check if user already exists
+    const existingUser = await USER.findOne({
+      $or: [
+        { UserName: UserName.trim() },
+        { Email: sanitizedEmail }
+      ]
+    });
+    if (existingUser) {
+      return res.status(400).json({ msg: "User already exists" });
+    }
 
-    const hashedpass = await bcrypt.hash(Password, 10);
+    const hashedPassword = await bcrypt.hash(Password, 10);
     const avatarBase = "https://api.dicebear.com/8.x/avataaars/svg";
     const seed = `${UserName}-${Math.floor(Math.random() * 10000)}`;
     const profilePhoto = `${avatarBase}?seed=${seed}&gender=${Gender.toLowerCase()}`;
 
+    // Save user
     await USER.create({
       FullName,
-      UserName,
-      Email,
-      Password: hashedpass,
+      UserName: UserName.trim(),
+      Email: sanitizedEmail,
+      Password: hashedPassword,
       Gender,
       ProfilePhoto: profilePhoto,
       isVerified: true,
     });
 
-    await OtpModel.deleteMany({ email: Email }); // Clean OTPs
+    // Remove OTPs
+    await OtpModel.deleteMany({ email: sanitizedEmail });
 
     res.status(201).json({ msg: "User registered successfully", success: true });
   } catch (error) {
     console.error("Register Error:", error);
+
+    // Handle MongoDB duplicate error gracefully
+    if (error.code === 11000 && error.keyPattern?.Email) {
+      return res.status(400).json({ msg: "Email is already registered" });
+    }
+
     res.status(500).json({ msg: "Server error" });
   }
 };
