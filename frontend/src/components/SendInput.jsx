@@ -15,7 +15,7 @@ export default function SendInput() {
     const trimmedMsg = message.trim();
     if (!trimmedMsg) return;
     try {
-      const res = await axios.post(`https://web-chat-app-u7yl.onrender.com/api/v1/message/send/${selectedUser?._id}`, {messages:trimmedMsg}, {
+      const res = await axios.post(`https://web-chat-app-kaag.onrender.com/api/v1/message/send/${selectedUser?._id}`, {messages:trimmedMsg}, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
