@@ -8,7 +8,7 @@ export default function useGetOtherUsers() {
         const getOtherUsers = async () => {
             try {
                 axios.defaults.withCredentials = true;
-                const res = await axios.get('https://web-chat-app-u7yl.onrender.com/api/v1/user/');
+                const res = await axios.get('https://web-chat-app-kaag.onrender.com/api/v1/user/');
                 
                 
                 console.log(res);
