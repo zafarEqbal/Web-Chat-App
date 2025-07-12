@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+body {
+  background-image: url('./assets/chat.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh; 
+  overflow: scroll;
+  /* background-color: aqua; */
+/* Custom scrollbar */
+}
+#chat::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+#chat::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+#chat::-webkit-scrollbar-thumb {
+   background-color: #cfcfcf;
+  
+}
+
+
