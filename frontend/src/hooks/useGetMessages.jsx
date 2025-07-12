@@ -49,7 +49,7 @@ useEffect(() => {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        `https://web-chat-app-u7yl.onrender.com/api/v1/message/${selectedUser._id}`,
+        `https://web-chat-app-kaag.onrender.com/api/v1/message/${selectedUser._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
