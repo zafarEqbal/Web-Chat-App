@@ -45,9 +45,10 @@ app.get("/api/v1/user/test", (req, res) => {
 app.use("/api/v1/message",message_route);
 
 app.use(express.static(path.join(_dirname, "/frontend/dist")))
-app.get('/{*any}',(_,res)=>{
-  res.sendFile(path.resolve(_dirname,"frontend","dist","index.html")) ;
-})
+app.get('*', (req, res) => {
+  res.sendFile(path.join(_dirname, 'frontend', 'dist', 'index.html'));
+});
+
 
 server.listen(PORT,()=>{
     connectdb();
