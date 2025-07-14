@@ -40,7 +40,7 @@ function Signup() {
       setLoading(true);
 
       const response = await axios.post(
-        'https://web-chat-app-kaag.onrender.com/api/v1/user/send-otp',
+        'https://web-chat-app-6tmw.onrender.com/api/v1/user/send-otp',
         { Email: email },
         {
           headers: { 'Content-Type': 'application/json' },

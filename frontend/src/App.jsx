@@ -48,7 +48,7 @@ function App() {
     let newsocket;
 
     if (authUser) {
-      newsocket = io('https://web-chat-app-kaag.onrender.com', {
+      newsocket = io('https://web-chat-app-6tmw.onrender.com', {
         query: {
           userId: authUser._id
         },

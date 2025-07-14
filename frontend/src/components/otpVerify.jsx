@@ -29,7 +29,7 @@ export default function OtpVerify() {
     if (!otp) return toast.error("❌ Please enter OTP");
 
     try {
-      const response = await axios.post('https://web-chat-app-kaag.onrender.com/api/v1/user/register', {
+      const response = await axios.post('https://web-chat-app-6tmw.onrender.com/api/v1/user/register', {
         ...userData,
         otp,
       }, {
@@ -52,7 +52,7 @@ export default function OtpVerify() {
     if (timer > 0) return;
 
     try {
-      await axios.post('https://web-chat-app-u7yl.onrender.com/api/v1/user/send-otp',
+      await axios.post('https://web-chat-app-6tmw.onrender.com/api/v1/user/send-otp',
         { Email: email },
         {
           headers: { 'Content-Type': 'application/json' },

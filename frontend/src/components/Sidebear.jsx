@@ -38,7 +38,7 @@ export default function Sidebear() {
     const logoutHandler = async () => {
         try {
             axios.defaults.withCredentials = true;
-            const res = await axios.get('https://web-chat-app-kaag.onrender.com/api/v1/user/logout');
+            const res = await axios.get('https://web-chat-app-6tmw.onrender.com/api/v1/user/logout');
             localStorage.removeItem("authUser");
             localStorage.removeItem("selectedUser");
             dispatch(resetUserState());

@@ -39,7 +39,7 @@ function Login() {
     setLoading(true);
     try {
       const res = await axios.post(
-        'https://web-chat-app-kaag.onrender.com/api/v1/user/login',
+        'https://web-chat-app-6tmw.onrender.com/api/v1/user/login',
         {
           UserName: username,
           Password: password,
