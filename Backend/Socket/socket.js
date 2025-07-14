@@ -10,10 +10,16 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ['https://web-chat-app-frontend-1o2g.onrender.com'],
+    origin: [
+      "http://localhost:5173",
+      "http://192.168.187.11:5173",
+      "https://web-chat-app-frontend-1o2g.onrender.com"
+    ],
     methods: ["GET", "POST"],
-  },
+    credentials: true
+  }
 });
+
 
 const usersocketMap = {}; // userId -> socketId
 
